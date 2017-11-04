@@ -4036,7 +4036,15 @@ static void rilEventAddWakeup(struct ril_event *ev) {
 }
 
 static void sendSimStatusAppInfo(Parcel &p, int num_apps, RIL_AppStatus appStatus[]) {
-        p.writeInt32(num_apps);
+        // Sprint SIMGLW206R SIM needs duplicated application records for LTE
+        bool need_sprint_hack = (num_apps == 1
+                && property_get_bool("telephony.lteOnCdmaDevice", false)
+                && appStatus[0].app_type == 2);
+        if (sprint_hack) {
+            p.writeInt32(num_apps + 2);
+        } else {
+            p.writeInt32(num_apps);
+        }
         startResponse;
         for (int i = 0; i < num_apps; i++) {
             p.writeInt32(appStatus[i].app_type);
@@ -4059,6 +4067,28 @@ static void sendSimStatusAppInfo(Parcel &p, int num_apps, RIL_AppStatus appStatu
                     appStatus[i].pin1_replaced,
                     appStatus[i].pin1,
                     appStatus[i].pin2);
+        }
+        if (need_sprint_hack) {
+            // CSIM
+            p.writeInt32(4);
+            p.writeInt32(appStatus[0].app_state);
+            p.writeInt32(appStatus[0].perso_substate);
+            writeStringToParcel(p, (const char*)(appStatus[0].aid_ptr));
+            writeStringToParcel(p, (const char*)
+                                          (appStatus[0].app_label_ptr));
+            p.writeInt32(appStatus[0].pin1_replaced);
+            p.writeInt32(appStatus[0].pin1);
+            p.writeInt32(appStatus[0].pin2);
+            // ISIM
+            p.writeInt32(5);
+            p.writeInt32(appStatus[0].app_state);
+            p.writeInt32(appStatus[0].perso_substate);
+            writeStringToParcel(p, (const char*)(appStatus[0].aid_ptr));
+            writeStringToParcel(p, (const char*)
+                                          (appStatus[0].app_label_ptr));
+            p.writeInt32(appStatus[0].pin1_replaced);
+            p.writeInt32(appStatus[0].pin1);
+            p.writeInt32(appStatus[0].pin2);
         }
         closeResponse;
 }
