@@ -1,21 +1,21 @@
 # Art
 dalvik.vm.dex2oat-swap=false
-dalvik.vm.heapminfree=2m
 
 # Audio
+af.fast_track_multiplier=1
+audio_hal.period_size=192
+audio.offload.video=true
 persist.audio.fluence.speaker=true
 persist.audio.fluence.voicecall=true
 persist.audio.fluence.voicerec=false
 ro.qc.sdk.audio.fluencetype=fluence
-mm.enable.smoothstreaming=true
-av.streaming.offload.enable=true
-use.voice.path.for.pcm.voip=true
-audio.offload.multiple.enabled=true
-audio.offload.gapless.enabled=true
-tunnel.audio.encode=true
-media.aac_51_output_enabled=true
+use.voice.path.for.pcm.voip=false
+use.dedicated.device.for.voip=true
+audio.deep_buffer.media=true
 audio.offload.pcm.16bit.enable=true
 audio.offload.pcm.24bit.enable=true
+audio.offload.multiple.enabled=false
+audio.offload.buffer.size.kb=32
 
 # Camera
 camera2.portability.force_api=1
@@ -33,9 +33,6 @@ ro.gps.agps_provider=1
 ro.qc.sdk.izat.premium_enabled=0
 ro.qc.sdk.izat.service_mask=0x0
 
-# perf api
-ro.vendor.extension_library=/vendor/lib/libqti-perfd-client.so
-
 # Media
 media.stagefright.legacyencoder=true
 media.stagefright.less-secure=true
@@ -44,16 +41,25 @@ persist.media.treble_omx=false
 # NFC
 ro.nfc.port=I2C
 
+# Perf
+ro.vendor.extension_library=/vendor/lib/libqti-perfd-client.so
+
 # Radio
 persist.data.netmgrd.qos.enable=true
 persist.data.qmi.adb_logmask=0
 persist.radio.add_power_save=1
 rild.libpath=/system/vendor/lib/libsec-ril.so
-ro.ril.telephony.qan_resp_strings=6
 ro.telephony.mms_data_profile=5
+ro.ril.telephony.qan_resp_strings=6
+
+# Ril sends only one RIL_UNSOL_CALL_RING, so set call_ring.multiple to false
+ro.telephony.call_ring.multiple=0
 
 # Sensors
 debug.sensors=1
 
-# Wifi
+# Tethering
+net.tethering.noprovisioning=true
+
+# WiFi
 wifi.interface=wlan0

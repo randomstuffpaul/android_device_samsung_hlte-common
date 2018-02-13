@@ -1,3 +1,4 @@
+#
 # Copyright 2016 The CyanogenMod Project
 # Copyright 2017-2018 The LineageOS Project
 #
